@@ -1,0 +1,38 @@
+specVersion: '2.4'
+metadata:
+  name: 'bidmap'
+type: application
+customConfiguration:
+  deployer:
+    type: sap-cp-cf
+    sourcePath: /dist # Path to the manifest.yml file: https://docs.cloudfoundry.org/devguide/deploy-apps/manifest.html
+    connection:
+      url: https://api.cf.us10.hana.ondemand.com
+    credentials:
+      username: lsantos@southend.com.ar
+      password: 7m3z4UeLPYRDpni@
+    sapCloudPlatform:
+      cloudFoundry:
+        org: ch-ped-industrial-dev
+        space: quick-wins-ariba
+        cliPath: C:\cf-cli\tools
+server:
+  customMiddleware:
+  - name: fiori-tools-proxy
+    afterMiddleware: compression
+    configuration:
+      ignoreCertError: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+      backend:
+      - path: /sap/opu/odata
+        url: http://localhost
+      ui5:
+        path: 
+        - /resources
+        - /test-resources
+        url: https://ui5.sap.com
+        version:  # The UI5 version, for instance, 1.78.1. Empty means latest version
+  - name: fiori-tools-appreload
+    afterMiddleware: compression
+    configuration:
+     port: 35729
+     path: webapp
